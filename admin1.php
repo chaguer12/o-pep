@@ -36,28 +36,28 @@ session_start();
                     <thead>
                         <tr>
                             <th class="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                                <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Plant</p>
-                            </th>
-                            <th class="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                                <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Price</p>
-                            </th>
-                            <th class="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                                 <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">ID</p>
                             </th>
                             <th class="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                                <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Status</p>
+                                <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Category</p>
                             </th>
+                            <th class="border-y border-blue-gray-900 opacity-90 p-4">
+                                <button class="bg-transparent text-blue-gray-900 hover:bg-lime-700 text-blue-gray-900  font-semibold hover:text-blue-gray-900 py-2 px-4 border border-lime-700 hover:border-transparent rounded">
+                                   Add category
+                                </button>
+                            </th>
+
 
 
 
                         </tr>
                     </thead>
                     <tbody>
-                     
 
 
-                    <?php
-                        $query = "SELECT * FROM plant";
+
+                        <?php
+                        $query = "SELECT * FROM categories";
                         $exec = mysqli_query($con, $query);
                         while ($row = mysqli_fetch_assoc($exec)) {
 
@@ -65,26 +65,15 @@ session_start();
 
                         ?>
                             <tr>
-                    
+
+
                                 <td class="p-4 border-b border-blue-gray-50">
-                                    <div class="flex items-center gap-3">
-                                        <img src="<?php echo $row['pic']; ?>" alt="Spotify" class="inline-block relative object-center !rounded-full w-12 h-12 rounded-lg  p-1">
-                                        <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold"><?php echo $row['p_name']; ?></p>
-                                    </div>
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"><?php echo $row['cat_id']; ?></p>
                                 </td>
                                 <td class="p-4 border-b border-blue-gray-50">
-                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"><?php echo $row['price']; ?>$</p>
+                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"><?php echo $row['cat_name']; ?></p>
                                 </td>
-                                <td class="p-4 border-b border-blue-gray-50">
-                                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"><?php echo $row['plant_id']; ?></p>
-                                </td>
-                                <td class="p-4 border-b border-blue-gray-50">
-                                    <div class="w-max">
-                                        <div class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-900 py-1 px-2 text-xs rounded-md" style="opacity: 1;">
-                                            <span class=""><?php echo $row['qty']; ?></span>
-                                        </div>
-                                    </div>
-                                </td>
+
 
                                 <td class="p-4 border-b border-blue-gray-50">
                                     <button class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-lime-700/75 active:bg-lime-700" type="button">
@@ -95,17 +84,17 @@ session_start();
                                         </span>
                                     </button>
                                 </td>
-                       
+
 
 
 
 
                     </tbody>
- 
-                            </tr>
-                            <?php
+
+                    </tr>
+                <?php
                         }
-    ?>
+                ?>
                 </table>
 
             </div>

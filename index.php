@@ -27,7 +27,7 @@ if (isset($_POST["button"])) {
             $req = mysqli_query($con, $sql);
             $row = mysqli_fetch_row($req);
             session_start();
-            $_SESSION['id'] = $row['0'];
+            $_SESSION['id'] = $row[0];
 
             //page redirection
             header("location: roles.php");
