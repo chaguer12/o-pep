@@ -1,27 +1,31 @@
 <?php
 require_once('includes/dbh-inc.php');
-
 if (isset($_POST['button'])) {
-    $email = $_POST['email'];
-    $pass = $_POST['passwd1'];
+    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $pass = mysqli_real_escape_string($con, $_POST['passwd1']);
+
     $query = "SELECT * FROM users WHERE email = '$email' AND psswd = '$pass'";
     $do = mysqli_query($con, $query);
-    $row = 0;
-    $row = mysqli_fetch_row($do);
-    if ($row == 0) {
-        echo "<script>alert('email or password incorrect!')</script>";
+
+    if (!$do) {
+        die("Query failed: " . mysqli_error($con));
+    }
+
+    $row = mysqli_fetch_assoc($do);
+
+    if (!$row) {
+        echo "<script>alert('Email or password incorrect!')</script>";
     } else {
-       if($row[5]==null){
         session_start();
-        $_SESSION['id']=$row[0];
-        header("location: roles.php");
-       } 
-       if($row[5]=2){
-        header("location:client.php");
-       }
-       if($row[5]=1){
-        header("location:admin.php");
-       }      
+        $_SESSION['id'] = $row['user_id'];
+
+        if ($row['role'] == 2) {
+            header("location: client.php");
+        } elseif ($row['role'] == 1) {
+            header("location: admin.php");
+        } else {
+            header("location: roles.php");
+        }
     }
 }
 

@@ -83,7 +83,7 @@ session_start();
         ?>
 <?php 
 
-while(isset($_POST['add'])){
+if(isset($_POST['add'])){
     $query1 = "SELECT * FROM plant where plant_id = $id";
     $do = mysqli_query($con,$query1);
     $id = $row['plant_id'];
@@ -92,20 +92,16 @@ while(isset($_POST['add'])){
 
 
 
-    
+   
 }
-
-
-
-?>
-
+?>   
         <div id="modal" class=" container    absolute right-0 w-1/2 bg-gray-200 h-screen transform translate-x-full transition-transform ease-in-out duration-300 ">
             <div class="flex pt-4">
                 <div class="w-10/12 bg-lime-700 mx-auto rounded-lg shadow-lg ">
                     <img class="h-32 w-32 p-4" src="<?php echo $row['pic']; ?>" alt="">
                 </div>
                 <div>
-
+                <!-- <p class="rounded-full bg-lime-900 px-2 py-0.5 text-xs font-semibold text-white"><php// echo $row['cat_name']; ?></p> -->
                 </div>
                 
 
@@ -114,6 +110,7 @@ while(isset($_POST['add'])){
 
             </div>
         </div>
+
 
     </section>
 

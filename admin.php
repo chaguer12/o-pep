@@ -22,8 +22,8 @@ session_start();
             </div>
             <div class="register-link px-8  ">
                 <ul class="flex ">
-                    <li class="text-white px-16 cursor-pointer">Categories</li>
-                    <li class="bg-white text-lime-700 px-16 cursor-pointer">Plants</li>
+                    <li class="text-white px-16 cursor-pointer"><a href="admin1.php">Categories</a></li>
+                    <li class="bg-white text-lime-700 px-16 cursor-pointer"><a href="admin.php">Plants</a></li>
                 </ul>
             </div>
         </div>
@@ -46,6 +46,11 @@ session_start();
                             </th>
                             <th class="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                                 <p class="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Status</p>
+                            </th>
+                            <th class="border-y border-blue-gray-900 opacity-90 p-4">
+                                <button class="bg-transparent text-blue-gray-900 hover:bg-lime-700 text-blue-gray-900  font-semibold hover:text-blue-gray-900 py-2 px-4 border border-lime-700 hover:border-transparent rounded">
+                                    Add Plant
+                                </button>
                             </th>
 
 
