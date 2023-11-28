@@ -22,8 +22,8 @@ session_start();
             </div>
             <div class="register-link px-8  ">
                 <ul class="flex ">
-                    <li class="bg-white text-lime-700 px-16 cursor-pointer">Dashboard</li>
-
+                    <li class="text-white px-16 cursor-pointer">Categories</li>
+                    <li class="bg-white text-lime-700 px-16 cursor-pointer">Plants</li>
                 </ul>
             </div>
         </div>
@@ -53,10 +53,10 @@ session_start();
                         </tr>
                     </thead>
                     <tbody>
-                     
 
 
-                    <?php
+
+                        <?php
                         $query = "SELECT * FROM plant";
                         $exec = mysqli_query($con, $query);
                         while ($row = mysqli_fetch_assoc($exec)) {
@@ -65,7 +65,7 @@ session_start();
 
                         ?>
                             <tr>
-                    
+
                                 <td class="p-4 border-b border-blue-gray-50">
                                     <div class="flex items-center gap-3">
                                         <img src="<?php echo $row['pic']; ?>" alt="Spotify" class="inline-block relative object-center !rounded-full w-12 h-12 rounded-lg  p-1">
@@ -95,17 +95,17 @@ session_start();
                                         </span>
                                     </button>
                                 </td>
-                       
+
 
 
 
 
                     </tbody>
- 
-                            </tr>
-                            <?php
+
+                    </tr>
+                <?php
                         }
-    ?>
+                ?>
                 </table>
 
             </div>
