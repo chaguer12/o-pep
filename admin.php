@@ -1,7 +1,12 @@
 <?php
 require_once('includes/dbh-inc.php');
 session_start();
-$query = "INSERT INTO "
+$query = "SELECT * FROM plant";
+$result = mysqli_query($con, $query);
+$row = mysqli_fetch_assoc($result);
+$query1 = "SELECT * FROM categories";
+$result1 = mysqli_query($con, $query1);
+$row1 = mysqli_fetch_assoc($result1);
 
 ?>
 <!DOCTYPE html>
@@ -43,12 +48,22 @@ $query = "INSERT INTO "
                             <h2 class="text-2xl font-semibold mb-6">Add New Plant</h2>
 
                             <!-- Form for adding a new plant -->
-                            <form action="#" method="post" enctype="multipart/form-data">
+                            <form action="#" method="post">
                                 <!-- Image Upload -->
                                 <div class="mb-4">
                                     <label for="image" class="block text-sm font-medium text-gray-600">Plant Image</label>
                                     <input type="file" id="image" name="image" accept="image/*" class="mt-1 p-2 w-full border rounded-md">
                                 </div>
+                                <?php
+                                if(isset($_POST['add_plant'])){
+                                    $name = $_POST['p_name'];
+                                    $name_query = "INSERT into plant(p_name) VALUES (?) ";
+                                    $statement1 = mysqli_prepare($con,$name_query);
+                                    mysqli_stmt_bind_param($statement1,"s",$name);
+                                    $name_result = mysqli_stmt_execute($statement1);
+
+                                }
+                                ?>
 
                                 <!-- Plant Name -->
                                 <div class="mb-4">
@@ -60,24 +75,76 @@ $query = "INSERT INTO "
                                 <div class="mb-4">
                                     <label for="category" class="block text-sm font-medium text-gray-600">Category</label>
                                     <select id="category" name="category" class="mt-1 p-2 w-full border rounded-md">
-                                        <!-- Add your categories as options -->
-                                        <option value="flowering">Flowering</option>
-                                        <option value="succulent">Succulent</option>
-                                        <!-- Add more options as needed -->
+                                        <?php while ($row1 = mysqli_fetch_assoc($result1)) { ?>
+                                            <option value="<?php echo $row1['cat_id']; ?>"><?php echo $row1['cat_name'];?></option>
+
+                                        <?php
+                                        }
+                                        if(isset($_POST['add_plant'])){
+                                            $cat_id = $_POST['category'] ;
+                                            $cat_req = "INSERT INTO plant (cat_id) VALUES (?)";
+                                            $statement4 = mysqli_prepare($con,$cat_req);
+                                            mysqli_stmt_bind_param($statement4,"i",$cat_id);
+                                            $cat_result = mysqli_stmt_execute($statement4);
+
+                                            
+                                        }
+
+
+                                        ?>
+                                        
                                     </select>
                                 </div>
 
                                 <!-- In Stock Checkbox -->
                                 <div class="mb-4">
+                                    <?php
+                                    if(isset($_POST['add_plant'])){
+                                        if(isset($_POST['inStock'])){
+                                            $inStock = true;
+                                            $req = "INSERT INTO plant (qty) VALUES ('In Stock')";
+                                            $req_result = mysqli_query($con,$req);
+
+                                        }else{
+                                            $inStock = false;
+                                            $req = "INSERT INTO plant (qty) VALUES ('Out Stock')";
+                                            $req_result = mysqli_query($con,$req);
+                                            
+                                        }
+                                    } 
+                                    
+                                    
+                                    ?>
                                     <input type="checkbox" id="inStock" name="inStock" class="mr-2">
                                     <label for="inStock" class="text-sm font-medium text-gray-600">In Stock</label>
                                 </div>
+                                <?php 
+                                if(isset($_POST['add_plant'])){
+                                    $price = $_POST['price'];
+                                    $pr_query = "INSERT into plant(price) VALUES (?) ";
+                                    $statement2 = mysqli_prepare($con,$pr_query);
+                                    mysqli_stmt_bind_param($statement2,"i",$price);
+                                    $pr_result = mysqli_stmt_execute($statement2);
+
+                                }
+                                
+                                ?>
 
                                 <!-- Price -->
                                 <div class="mb-4">
                                     <label for="price" class="block text-sm font-medium text-gray-600">Price ($)</label>
                                     <input type="number" id="price" name="price" min="0" step="0.01" class="mt-1 p-2 w-full border rounded-md">
                                 </div>
+                                <?php
+                                if(isset($_POST['add_plant'])){
+                                    $vie = $_POST['yearsToLive'];
+                                    $life_query = "INSERT into plant(vie) VALUES (?) ";
+                                    $statement3 = mysqli_prepare($con,$life_query);
+                                    mysqli_stmt_bind_param($statement3,"i",$vie);
+                                    $life_result = mysqli_stmt_execute($statement3);
+
+                                }
+                                ?>
 
                                 <!-- Years to Live -->
                                 <div class="mb-4">
@@ -86,11 +153,10 @@ $query = "INSERT INTO "
                                 </div>
 
                                 <!-- Submit Button -->
-                                <div class="text-center">
-                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Add Plant</button>
-                                </div>
-                                <div class="text-center mb-4">
-                                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md mr-2" onclick="closeModal()">Cancel</button>
+                                <div class="text-center flex justify-around">
+                                    <button name="add_plant" type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Add Plant</button>
+
+                                    
                                 </div>
                             </form>
                         </div>
