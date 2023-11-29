@@ -7,10 +7,12 @@ $id = $_SESSION['id'];
 if (isset($_POST['client'])) {
     $query = "UPDATE users SET role_id = 2 WHERE user_id = $id";
     $do = mysqli_query($con, $query);
+    header("location: login.php");
 }
 if (isset($_POST['admin'])) {
     $query = "UPDATE users SET role_id = 1 WHERE user_id = $id";
     $do = mysqli_query($con, $query);
+    header("location: login.php");
 }
 
 
@@ -37,8 +39,8 @@ if (isset($_POST['admin'])) {
             </div>
             <div class="register-link px-8  ">
                 <ul class="flex ">
-                    <li class="text-white px-16 cursor-pointer">Log In </li>
-                    <li class="bg-white text-lime-700 px-16 cursor-pointer">Sign Up</li>
+                    <li class="text-white px-16 cursor-pointer"><a href="login.php">Log In</a> </li>
+                    <li class="bg-white text-lime-700 px-16 cursor-pointer"><a href="index.php">Sign Up</a></li>
                 </ul>
             </div>
         </div>
