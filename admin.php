@@ -8,6 +8,49 @@ $query1 = "SELECT * FROM categories";
 $result1 = mysqli_query($con, $query1);
 $row1 = mysqli_fetch_assoc($result1);
 
+// Move this block inside the isset($_POST['add_plant']) block
+if (isset($_POST['add_plant'])) {
+    $img = ''; // Placeholder for the image file path
+
+    // Check if a file was uploaded successfully
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+        $target_dir = "images/"; // Change this to your desired upload directory
+        $target_file = $target_dir . basename($_FILES['image']['name']);
+
+        // Move the uploaded file to the specified directory
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            $img = $target_file;
+        } else {
+            echo "Error uploading image.";
+            // Handle the error accordingly (e.g., show an error message)
+            exit;
+        }
+    }
+
+    // Retrieve other form data
+    $p_name = $_POST['plantName'];
+    $cat_id = $_POST['category']; // Updated variable name to reflect the category ID
+    $qty = isset($_POST['inStock']) ? 'In Stock' : 'Out Stock';
+    $price = $_POST['price'];
+    $life = $_POST['yearsToLive'];
+
+    // Sanitize input (you might want to use prepared statements for better security)
+    $p_name = mysqli_real_escape_string($con, $p_name);
+    // Add more sanitization for other variables if needed
+
+    // Insert into the database
+    $query = "INSERT INTO plant (pic, p_name, cat_id, qty, price, vie) VALUES ('$img', '$p_name', '$cat_id', '$qty', '$price', '$life')";
+    $result = mysqli_query($con, $query);
+
+    // Check if the insertion was successful
+    if ($result) {
+        header("Location: admin.php");
+    } else {
+        echo "Error: " . mysqli_error($con);
+    }
+}
+
+// Rest of your HTML code...
 ?>
 
 <!DOCTYPE html>
@@ -49,21 +92,13 @@ $row1 = mysqli_fetch_assoc($result1);
                             <h2 class="text-2xl font-semibold mb-6">Add New Plant</h2>
 
                             <!-- Form for adding a new plant -->
-                            <form action="./uploads.php" method="post">
+                            <form enctype="multipart/form-data" method="post">
                                 <!-- Image Upload -->
                                 <div class="mb-4">
                                     <label for="image" class="block text-sm font-medium text-gray-600">Plant Image</label>
                                     <input type="file" id="image" name="image" accept="image/*" class="mt-1 p-2 w-full border rounded-md">
                                 </div>
-                                <?php
-                                if (isset($_POST['add_plant'])) {
-                                    $name = $_POST['p_name'];
-                                    $name_query = "INSERT into plant(p_name) VALUES (?) ";
-                                    $statement1 = mysqli_prepare($con, $name_query);
-                                    mysqli_stmt_bind_param($statement1, "s", $name);
-                                    $name_result = mysqli_stmt_execute($statement1);
-                                }
-                                ?>
+
 
                                 <!-- Plant Name -->
                                 <div class="mb-4">
@@ -72,73 +107,31 @@ $row1 = mysqli_fetch_assoc($result1);
                                 </div>
 
                                 <!-- Category Selection -->
+                                <!-- Category Selection -->
                                 <div class="mb-4">
                                     <label for="category" class="block text-sm font-medium text-gray-600">Category</label>
                                     <select id="category" name="category" class="mt-1 p-2 w-full border rounded-md">
                                         <?php while ($row1 = mysqli_fetch_assoc($result1)) { ?>
                                             <option value="<?php echo $row1['cat_id']; ?>"><?php echo $row1['cat_name']; ?></option>
-
-                                        <?php
-                                        }
-                                        if (isset($_POST['add_plant'])) {
-                                            $cat_id = $_POST['category'];
-                                            $cat_req = "INSERT INTO plant (cat_id) VALUES (?)";
-                                            $statement4 = mysqli_prepare($con, $cat_req);
-                                            mysqli_stmt_bind_param($statement4, "i", $cat_id);
-                                            $cat_result = mysqli_stmt_execute($statement4);
-                                        }
-
-
-                                        ?>
-
+                                        <?php } ?>
                                     </select>
                                 </div>
 
+
                                 <!-- In Stock Checkbox -->
                                 <div class="mb-4">
-                                    <?php
-                                    if (isset($_POST['add_plant'])) {
-                                        if (isset($_POST['inStock'])) {
-                                            $inStock = true;
-                                            $req = "INSERT INTO plant (qty) VALUES ('In Stock')";
-                                            $req_result = mysqli_query($con, $req);
-                                        } else {
-                                            $inStock = false;
-                                            $req = "INSERT INTO plant (qty) VALUES ('Out Stock')";
-                                            $req_result = mysqli_query($con, $req);
-                                        }
-                                    }
 
-
-                                    ?>
                                     <input type="checkbox" id="inStock" name="inStock" class="mr-2">
                                     <label for="inStock" class="text-sm font-medium text-gray-600">In Stock</label>
                                 </div>
-                                <?php
-                                if (isset($_POST['add_plant'])) {
-                                    $price = $_POST['price'];
-                                    $pr_query = "INSERT into plant(price) VALUES (?) ";
-                                    $statement2 = mysqli_prepare($con, $pr_query);
-                                    mysqli_stmt_bind_param($statement2, "i", $price);
-                                    $pr_result = mysqli_stmt_execute($statement2);
-                                }
 
-                                ?>
 
                                 <!-- Price -->
                                 <div class="mb-4">
                                     <label for="price" class="block text-sm font-medium text-gray-600">Price ($)</label>
                                     <input type="number" id="price" name="price" min="0" step="0.01" class="mt-1 p-2 w-full border rounded-md">
                                 </div>
-                                <?php
-                                if (isset($_POST['add_plant'])) {
-                                    $vie = $_POST['yearsToLive'];
-                                    $life_query = "INSERT into plant(vie) VALUES (?) ";
-                                    $statement3 = mysqli_prepare($con, $life_query);
-                                    mysqli_stmt_bind_param($statement3, "i", $vie);
-                                    $life_result = mysqli_stmt_execute($statement3);
-                                }
-                                ?>
+
 
                                 <!-- Years to Live -->
                                 <div class="mb-4">
@@ -163,7 +156,7 @@ $row1 = mysqli_fetch_assoc($result1);
 
 
         <div class=" min-h-screen items-center bg-white">
-            <button id="openModal" name="add_cat" type="submit" class="bg-lime-700 text-white ml-8 px-4 py-2 rounded-md">
+            <button id="openModal" type="submit" class="bg-lime-700 text-white ml-8 px-4 py-2 rounded-md">
                 Add plant
             </button>
 

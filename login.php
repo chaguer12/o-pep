@@ -43,7 +43,7 @@ if (isset($_POST['button'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./style/style.css">
-    <title>Sign up</title>
+    <title>Log in</title>
 </head>
 
 <body class="relative h-screen">
